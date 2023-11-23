@@ -14,9 +14,9 @@
                     <div class="subTitle">商品添加</div>
                     <div class="wrapper">
                         <el-form :model="goodsForm" :rules="rules" ref="ruleForm" label-width="100px" size="small" class="demo-ruleForm">
-                            <el-form-item label="所属分类" prop="category">
+                            <!-- <el-form-item label="所属分类" prop="category">
                                 <span class="category"> {{ goodsForm.category }}</span>
-                            </el-form-item>
+                            </el-form-item> -->
                             <el-form-item label="商品名称" prop="title">
                                 <el-input v-model="goodsForm.title"></el-input>
                             </el-form-item>
@@ -30,9 +30,10 @@
                                 <el-input v-model="goodsForm.sellPoint"></el-input>
                             </el-form-item>
                             <el-form-item label="上传图片" prop="image">
+                                <GoodsUpload @sendImage="sendImage" :fileList="fileList"></GoodsUpload>
                             </el-form-item>
                             <el-form-item label="商品描述" prop="descs">
-                                <el-input v-model="goodsForm.sellPoint"></el-input>
+                                <WangEditor @sendEditor="sendEditor"></WangEditor>
                             </el-form-item>
                             <el-form-item label="首页轮播推荐" prop="isBanner">
                                 <el-switch v-model="goodsForm.isBanner" active-color="#13ce66"></el-switch>
@@ -43,6 +44,13 @@
                             <el-form-item label="是否上架商品" prop="shelves">
                                 <el-switch v-model="goodsForm.shelves" active-color="#13ce66"></el-switch>
                             </el-form-item>
+                            <el-form-item>
+                                <el-button v-show="title !='详情'" type = "primary"
+                                    @click="submitForm(ruleForm)">保存</el-button>
+                                <el-button v-show="title !='详情'"
+                                    @click="resetForm(ruleForm)">重置</el-button>
+                                <el-button @click="goGoodsList()" type = "info" plain>取消</el-button> 
+                            </el-form-item>
                         </el-form>
                     </div>
                 </div>
@@ -52,8 +60,19 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import GoodsTree from './GoodsTree.vue'
+import GoodsUpload from './GoodsUpload.vue'
+import WangEditor from './WangEditor.vue'
+import api from '@/api/index'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+import { ElMessage } from 'element-plus'
+
+//图片容器
+const fileList = ref([])
+const ruleForm = ref()
 
 const goodsForm = reactive({
     cid: '',
@@ -96,6 +115,64 @@ const changeTree=(val)=>{
     console.log('接受Tree点击的数据', val);
     goodsForm.cid = val.cid
     goodsForm.category = val.name
+}
+
+//接受上传图片
+// const sendImage=(url)=>{
+//     console.log('上传图片', url);
+//     goodsForm.image.push(url);
+// }
+
+//接受wangEditor的数据
+const sendEditor=(val)=>{
+    console.log('接受wangEditor数据', val);
+    goodsForm.descs = val;
+}
+
+//添加商品接口
+const addGood = async (params) => {
+    let res = await api.addGood(params)
+    if (res.data.status === 200) {
+        router.push('/goods/list')
+        ElMessage({
+            showClose: true,
+            message: '恭喜你，添加商品成功',
+            type: 'success',
+        })
+    } else {
+        ElMessage({
+            showClose: true,
+            message: 'Oops, this is a error message.',
+            type: 'error',
+        })
+    }
+}
+
+//保存
+const submitForm = async formEl => {
+  if (!formEl) return
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      console.log('获取表单的输入信息: ', goodsForm);
+      let { id, title, cid, category, sellPoint, price, num, descs, image } = goodsForm;
+    //   addGood({
+    //     title, cid, category, sellPoint, price, num, descs,
+    //     image: JSON.stringify(image)
+    //   })
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
+}
+
+//重置
+const resetForm=()=>{
+    
+}
+
+//取消
+const goGoodsList=()=>{
+    
 }
 
 </script>

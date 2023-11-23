@@ -1,11 +1,11 @@
 <template>
-    <el-tree :props="props" :load="loadNode" lazy show-checkbox @node-click="clickTree"/>
+    <!-- <el-tree :props="props" :load="loadNode" lazy show-checkbox @node-click="clickTree"/> -->
 </template>
 
 <script setup>
 
 // import api from '@/api/index'
-const emit = defineEmits(['changeTree'])
+// const emit = defineEmits(['changeTree'])
 
 // import Node from 'element-plus/es/components/tree/src/model/node'
 
@@ -14,11 +14,11 @@ const emit = defineEmits(['changeTree'])
 //   leaf?: boolean
 // }
 
-const props = {
-  label: 'name',
-  children: 'zones',
-  isLeaf: 'leaf',
-}
+// const props = {
+//   label: 'name',
+//   children: 'zones',
+//   isLeaf: 'leaf',
+// }
 
 // const loadNode = async (node, resolve) => {
 //   if (node.level === 0) {
@@ -40,9 +40,9 @@ const props = {
 //     }
 // }
 
-const clickTree=(data,node)=>{
-    emit('changeTree', data)
-}
+// const clickTree=(data,node)=>{
+//     emit('changeTree', data)
+// }
 </script>
 
 <style>

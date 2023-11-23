@@ -144,7 +144,9 @@
   
       //绘制柱状图
       const bar = (xData,yData,yBarData) => {
-        var myChart = echarts.init(document.getElementById("charts"))
+        let dsiab_com = document.getElementById("charts")
+        dsiab_com.removeAttribute('_echarts_instance_')
+        var myChart = echarts.init(dsiab_com);
         // 指定图表的配置项和数据
         var option = {
           title: {
@@ -174,8 +176,9 @@
   
       //绘制饼图
       const pie = (data) => {
-        var chartDom = document.getElementById('pie');
-        var myChart = echarts.init(chartDom);
+        let dsiab_com = document.getElementById("pie")
+        dsiab_com.removeAttribute('_echarts_instance_')
+        var myChart = echarts.init(dsiab_com);
         var option;
   
         option = {
