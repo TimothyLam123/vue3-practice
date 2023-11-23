@@ -28,6 +28,8 @@
     <div class="wrapper">
         <el-table :data="tableData" border style="width: 100%" :header-row-style="{ color: '#333', textalgin: 'center' }"
       @selection-change="changeTable">
+      <el-table-column type="selection" width="50">
+      </el-table-column>
       <el-table-column prop="id" label="商品编号" width="100" />
       <el-table-column prop="title" label="商品名称" width="180" />
       <el-table-column prop="price" label="商品价格" width="100" />
@@ -48,9 +50,9 @@
 <script setup>
 import { reactive,ref } from 'vue'
 import { Delete,Plus } from '@element-plus/icons-vue'
-import api from '@/api/index'
+// import api from '@/api/index'
 // console.log(api)
-// import dayjs from 'dayjs'
+import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 
 const router = useRouter();
@@ -88,16 +90,30 @@ const handleDelete=(index,row)=>{
 //获取产品列表
 const getGoodsList = (page) => {
     // console.log('123',api.getGoodsList({ page }))
-    let res = api.getGoodsList({ page });
+    // let res = api.getGoodsList({ page });
     // console.log('Data:', res.data);
     // let arr = res.data.data;
     // arr.forEach(ele => {
     //     ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
     // });
     // tableData.value = res.date.data
+    const customData = [
+      { id: 'id1', title:'产品名称1', category: '产品类型1', price: '123', create_time: '1', sellPoint: '11', descs: '111' },
+      { id: 'id2', title:'产品名称2', category: '产品类型2', price: '123', create_time: '2', sellPoint: '22', descs: '222' },
+      { id: 'id3', title:'产品名称3', category: '产品类型3', price: '123', create_time: '3', sellPoint: '33', descs: '333' }
+    ];
+    for (const item of customData){
+      console.log('custom name', item.title);
+      console.log('custome type', item.category);
+    }
+    customData.forEach(ele => {
+        ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
+    });
+    tableData.value = customData;
+    console.log('tabled data', tableData.value)
 }
 
-// getGoodsList(1)
+getGoodsList(1)
 
 
 
