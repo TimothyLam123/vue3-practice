@@ -1,19 +1,33 @@
 <template>
     <div class="menu">
-        <MyMenu></MyMenu>
+        <MyMenu :isClose="isClose"></MyMenu>
     </div>
-    <div class="content">
-        <Content></Content>
+    <div class="content" :class="{active:isClose}">
+        <Content :isClose="isClose" @change="change"></Content>
     </div>
 </template>
 
 <script>
 import MyMenu from './MyMenu'
 import Content from './Content'
+import { ref } from 'vue'
 export default {
     components: {
         MyMenu,
         Content
+    },
+    setup(){
+        //定义变量
+        let isClose = ref(false);
+
+        //修改变量
+        const change=()=>{
+            isClose.value = !isClose.value;
+        }
+        return {
+            isClose,
+            change
+        }
     }
 }
 </script>
@@ -28,5 +42,8 @@ export default {
 }
 .content{
     padding-left: 200px;
+}
+.active{
+    padding-left: 64px;
 }
 </style>

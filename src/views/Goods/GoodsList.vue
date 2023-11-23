@@ -1,13 +1,127 @@
 <template>
-    <h2>产品列表</h2>
+    <div class="list-header">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form-item label="产品名称">
+      <el-input v-model="formInline.user" placeholder="产品名称" clearable />
+    </el-form-item>
+    <el-form-item label="产品类型">
+      <el-select
+        v-model="formInline.region"
+        placeholder="产品类型"
+        clearable
+      >
+        <el-option label="Zone one" value="shanghai" />
+        <el-option label="Zone two" value="beijing" />
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit">查询</el-button>
+    </el-form-item>
+  </el-form>
+
+  <br>
+
+  <el-button type="warning" :icon="Plus" @click="addGoods">添加商品</el-button>
+  <el-button type="danger" :icon="Delete">删除商品</el-button>
+    </div>
+  
+    <div class="wrapper">
+        <el-table :data="tableData" border style="width: 100%" :header-row-style="{ color: '#333', textalgin: 'center' }"
+      @selection-change="changeTable">
+      <el-table-column prop="id" label="商品编号" width="100" />
+      <el-table-column prop="title" label="商品名称" width="180" />
+      <el-table-column prop="price" label="商品价格" width="100" />
+      <el-table-column prop="category" label="商品类目" width="100" />
+      <el-table-column prop="create_time" label="添加时间" width="200" />
+      <el-table-column prop="sellPoint" label="商品卖点" />
+      <el-table-column prop="descs" label="商品描述" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    </div>
 </template>
 
-<script>
-export default {
+<script setup>
+import { reactive,ref } from 'vue'
+import { Delete,Plus } from '@element-plus/icons-vue'
+import api from '@/api/index'
+// console.log(api)
+// import dayjs from 'dayjs'
+import { useRouter } from 'vue-router'
+
+const router = useRouter();
+
+//搜索数据
+const formInline = reactive({
+  user: '',
+  region: '',
+  date: '',
+})
+
+//查询
+const onSubmit = () => {
+  console.log('submit!')
+}
+
+//表格数据
+const tableData = ref([])
+
+//选择框
+const changeTable=()=>{
 
 }
+
+//编辑
+const handleEdit=(index,row)=>{
+
+}
+
+//删除
+const handleDelete=(index,row)=>{
+
+}
+
+//获取产品列表
+const getGoodsList = (page) => {
+    // console.log('123',api.getGoodsList({ page }))
+    let res = api.getGoodsList({ page });
+    // console.log('Data:', res.data);
+    // let arr = res.data.data;
+    // arr.forEach(ele => {
+    //     ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
+    // });
+    // tableData.value = res.date.data
+}
+
+// getGoodsList(1)
+
+
+
+
+//点击添加商品
+const addGoods=()=>{
+    router.push('/goods/addGoods')
+}
+
 </script>
 
-<style>
+<style lang="less" scoped>
+.list-header{
+    border: 1px solid #000;
+    padding: 10px;
+    border-radius: 6px;
+}
 
+.el-form-item{
+    margin-bottom: 0px;
+}
+
+.wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 </style>

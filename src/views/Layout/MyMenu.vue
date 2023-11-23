@@ -2,7 +2,7 @@
     <el-menu
     :default-active="route.path"
     class="el-menu-vertical-demo"
-    :collapse="isCollapse"
+    :collapse="isClose"
     background-color="#112f50"
     text-color="#fff"
     active-text-color="#ffd04b"
@@ -16,14 +16,12 @@
         </template>
     </el-menu-item>
     <el-menu-item index="/">
-        <template #title>
-            <el-icon>
-                <Briefcase />
-            </el-icon>
-            <span>
-                系统首页
-            </span>
-      </template>
+        <el-icon>
+            <Briefcase />
+        </el-icon>
+        <span>
+            系统首页
+        </span>
     </el-menu-item>
     <el-sub-menu index="/goods">
       <template #title>
@@ -47,14 +45,15 @@
 import { ref } from 'vue';
 import { useRoute } from 'vue-router'
 export default {
+  props:['isClose'],
     setup(){
         // 定义开关
-        const isCollapse = ref(false)
+        // const isCollapse = ref(false)
         //使用路由
         const route = useRoute()
         console.log(route);
         return {
-            isCollapse,
+            // isCollapse,
             route
         }
     }
@@ -65,5 +64,8 @@ export default {
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.el-menu{
+  border-right: none;
 }
 </style>

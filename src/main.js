@@ -10,5 +10,10 @@ const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }
-  
+// 挂载全局
+import echarts from '@/Plugin/echarts'
+app.config.globalProperties.$echarts = echarts;
+
+// app.provide('echarts',echarts)
+
 app.use(router).mount('#app')
