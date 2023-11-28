@@ -22,6 +22,7 @@
   <br>
 
   <el-button type="warning" :icon="Plus" @click="addGoods">添加商品</el-button>
+  <!-- <AddGoods :customData="customData" @customEvent="newGoods"/> -->
   <el-button type="danger" :icon="Delete">删除商品</el-button>
     </div>
   
@@ -51,13 +52,14 @@
 </template>
 
 <script setup>
-import { reactive,ref } from 'vue'
+import { reactive,ref,onMounted } from 'vue'
 import { DataAnalysis, Delete,EditPen,Plus } from '@element-plus/icons-vue'
 import api from '@/api/index'
 // console.log(api)
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/Pagination.vue'
+import AddGoods from './AddGoods.vue'
 
 const router = useRouter();
 
@@ -163,7 +165,18 @@ const addGoods=()=>{
     router.push('/goods/addGoods')
 };
 
-export const customData = ref([]);
+//接受新的商品从AddGoods
+// const newGoods = (message) => {
+//   console.log('从AddGoods接收的新商品', message)
+// }
+// export const customData = ref([]);
+let goodsFormReceived = ref('')
+onMounted(() => {
+  goodsFormReceived = localStorage.getItem('goodsFormToSend')
+  console.log('data received from addGoods', goodsFormReceived)
+  if (goodsFormReceived == "undefined") return
+  tableData.value.push(goodsFormReceived);
+});
 
 </script>
 

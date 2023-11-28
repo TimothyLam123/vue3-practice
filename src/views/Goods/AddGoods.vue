@@ -47,6 +47,8 @@
                             <el-form-item>
                                 <el-button v-show="title !='详情'" type = "primary"
                                     @click="submitForm(ruleForm)">保存</el-button>
+                                <!-- <el-button v-show="title !='详情'" type = "primary"
+                                    @click="submitForm">保存</el-button> -->
                                 <el-button v-show="title !='详情'"
                                     @click="resetForm(ruleForm)">重置</el-button>
                                 <el-button @click="goGoodsList()" type = "info" plain>取消</el-button> 
@@ -60,7 +62,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, defineEmits, defineProps } from 'vue';
 import GoodsTree from './GoodsTree.vue'
 import GoodsUpload from './GoodsUpload.vue'
 import WangEditor from './WangEditor.vue'
@@ -130,23 +132,23 @@ const sendEditor=(val)=>{
 }
 
 //添加商品接口
-const addGood = async (params) => {
-    let res = await api.addGood(params)
-    if (res.data.status === 200) {
-        router.push('/goods/list')
-        ElMessage({
-            showClose: true,
-            message: '恭喜你，添加商品成功',
-            type: 'success',
-        })
-    } else {
-        ElMessage({
-            showClose: true,
-            message: 'Oops, this is a error message.',
-            type: 'error',
-        })
-    }
-}
+// const addGood = async (params) => {
+//     let res = await api.addGood(params)
+//     if (res.data.status === 200) {
+//         router.push('/goods/list')
+//         ElMessage({
+//             showClose: true,
+//             message: '恭喜你，添加商品成功',
+//             type: 'success',
+//         })
+//     } else {
+//         ElMessage({
+//             showClose: true,
+//             message: 'Oops, this is a error message.',
+//             type: 'error',
+//         })
+//     }
+// }
 
 //保存
 const submitForm = async formEl => {
@@ -159,11 +161,33 @@ const submitForm = async formEl => {
     //     title, cid, category, sellPoint, price, num, descs,
     //     image: JSON.stringify(image)
     //   })
+      console.log('Goods Form', goodsForm)
+      console.log('Goods Form Value', goodsForm.value)
+      localStorage.setItem('goodsFormToSend', JSON.stringify(goodsForm.value));
+    //   router.push('/goods/list')
     } else {
       console.log('error submit!', fields)
     }
   })
 }
+// const props = defineProps(['customData'])
+// const emit = defineEmits();
+// const submitForm = async formEl => {
+//   if (!formEl) return
+//   await formEl.validate((valid, fields) => {
+//     if (valid) {
+//       console.log('获取表单的输入信息: ', goodsForm);
+//       let { id, title, cid, category, sellPoint, price, num, descs, image } = goodsForm;
+//     //   addGood({
+//     //     title, cid, category, sellPoint, price, num, descs,
+//     //     image: JSON.stringify(image)
+//     //   })
+//       $emit('goodsForm', goodsForm);
+//     } else {
+//       console.log('error submit!', fields)
+//     }
+//   })
+// }
 
 //重置
 const resetForm=()=>{
