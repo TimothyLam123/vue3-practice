@@ -13,7 +13,10 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // 挂载全局
 import echarts from '@/Plugin/echarts'
 app.config.globalProperties.$echarts = echarts;
-
 // app.provide('echarts',echarts)
+
+// import ElementPlus from 'element-plus';
+// import locale from "element-plus/lib/locale/lang/zh-cn";
+// app.use(ElementPlus, {locale});
 
 app.use(router).mount('#app')

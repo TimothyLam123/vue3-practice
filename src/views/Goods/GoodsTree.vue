@@ -4,15 +4,16 @@
 
 <script setup>
 
-// import api from '@/api/index'
+// // import api from '@/api/index'
+// import { getGoodsList } from './GoodsList.vue'
 // const emit = defineEmits(['changeTree'])
 
-// import Node from 'element-plus/es/components/tree/src/model/node'
+// // import Node from 'element-plus/es/components/tree/src/model/node'
 
-// interface Tree {
-//   name: string
-//   leaf?: boolean
-// }
+// // interface Tree {
+// //   name: string
+// //   leaf?: boolean
+// // }
 
 // const props = {
 //   label: 'name',
@@ -22,19 +23,20 @@
 
 // const loadNode = async (node, resolve) => {
 //   if (node.level === 0) {
-    // let result = await goodsItemCategory(1)
-    // return resolve(result);
+//     let result = await goodsItemCategory(1)
+//     return resolve(result);
 //   }
 //   if (node.level > 1) {
-    // let result = await goodsItemCategory(node.data.cid)
-    // return resolve(result);
+//     let result = await goodsItemCategory(node.data.cid)
+//     return resolve(result);
 //   }
 // }
-//获取数据
-// const goodsItemCategory = async (type)=>{
-//     let res = await api.goodsItemCategory({ type })
-//     if (res.data.status === 200) {
-//         return res.data.result;
+// //获取数据
+// const goodsItemCategory = async ()=>{
+//     const res = getGoodsList()
+//     console.log('res', res)
+//     if (res.category) {
+//         return res;
 //     } else {
 //         return [];
 //     }

@@ -14,9 +14,9 @@
                     <div class="subTitle">商品添加</div>
                     <div class="wrapper">
                         <el-form :model="goodsForm" :rules="rules" ref="ruleForm" label-width="100px" size="small" class="demo-ruleForm">
-                            <!-- <el-form-item label="所属分类" prop="category">
-                                <span class="category"> {{ goodsForm.category }}</span>
-                            </el-form-item> -->
+                            <el-form-item label="所属分类" prop="category">
+                                <el-input v-model="goodsForm.category"></el-input>
+                            </el-form-item>
                             <el-form-item label="商品名称" prop="title">
                                 <el-input v-model="goodsForm.title"></el-input>
                             </el-form-item>
@@ -111,11 +111,11 @@ const rules = reactive({
 })
 
 //接受Tree点击的数据
-const changeTree=(val)=>{
-    console.log('接受Tree点击的数据', val);
-    goodsForm.cid = val.cid
-    goodsForm.category = val.name
-}
+// const changeTree=(val)=>{
+//     console.log('接受Tree点击的数据', val);
+//     goodsForm.cid = val.cid
+//     goodsForm.category = val.name
+// }
 
 //接受上传图片
 // const sendImage=(url)=>{

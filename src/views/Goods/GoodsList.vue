@@ -2,7 +2,7 @@
     <div class="list-header">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
     <el-form-item label="产品名称">
-      <el-input v-model="formInline.user" placeholder="产品名称" clearable />
+      <el-input v-model="formInline.name" placeholder="产品名称" clearable />
     </el-form-item>
     <el-form-item label="产品类型">
       <el-select
@@ -32,45 +32,79 @@
       </el-table-column>
       <el-table-column prop="id" label="商品编号" width="100" />
       <el-table-column prop="title" label="商品名称" width="180" />
-      <el-table-column prop="price" label="商品价格" width="100" />
-      <el-table-column prop="category" label="商品类目" width="100" />
+      <el-table-column prop="price" label="商品价格" width="120" />
+      <el-table-column prop="category" label="商品类目" width="140" />
       <el-table-column prop="create_time" label="添加时间" width="200" />
       <el-table-column prop="sellPoint" label="商品卖点" />
       <el-table-column prop="descs" label="商品描述" />
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button size="small" :icon="EditPen" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" :icon="Delete" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     </div>
+
+    <Pagination :total="total" :pageSize="pageSize"></Pagination>
+    <!-- <Pagination></Pagination> -->
 </template>
 
 <script setup>
 import { reactive,ref } from 'vue'
-import { Delete,Plus } from '@element-plus/icons-vue'
-// import api from '@/api/index'
+import { DataAnalysis, Delete,EditPen,Plus } from '@element-plus/icons-vue'
+import api from '@/api/index'
 // console.log(api)
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
+import Pagination from '@/components/Pagination.vue'
 
 const router = useRouter();
 
 //搜索数据
 const formInline = reactive({
-  user: '',
+  name: '',
   region: '',
-  date: '',
 })
 
-//查询
-const onSubmit = () => {
-  console.log('submit!')
-}
+//分页数据变量
+const total = ref(10)
+const pageSize = ref(10)
 
 //表格数据
 const tableData = ref([])
+
+//查询
+const onSubmit = async () => {
+  console.log('formInline submit!', formInline.name)
+
+  const data = await getGoodsList();
+  let filteredData = null;
+
+  console.log('filtered data before', filteredData)
+  tableData.value = [];
+  
+  console.log('table data 1', tableData.value)
+  
+  for (const item of data) {
+    if (formInline.name != '') {
+      if (item.title.includes(formInline.name)) {
+        filteredData = item;
+        tableData.value.push(filteredData);
+        // break;
+      }
+    }
+  }
+  console.log('table data 2', tableData.value)
+
+  console.log('filtered data after', filteredData)
+  if (tableData.value.length === 0) {
+    total.value = 0;
+    pageSize.value = 0
+    console.log('table data after', tableData.value)
+  }
+}
+
 
 //选择框
 const changeTable=()=>{
@@ -88,7 +122,7 @@ const handleDelete=(index,row)=>{
 }
 
 //获取产品列表
-const getGoodsList = (page) => {
+const getGoodsList = () => {
     // console.log('123',api.getGoodsList({ page }))
     // let res = api.getGoodsList({ page });
     // console.log('Data:', res.data);
@@ -99,21 +133,27 @@ const getGoodsList = (page) => {
     // tableData.value = res.date.data
     const customData = [
       { id: 'id1', title:'产品名称1', category: '产品类型1', price: '123', create_time: '1', sellPoint: '11', descs: '111' },
-      { id: 'id2', title:'产品名称2', category: '产品类型2', price: '123', create_time: '2', sellPoint: '22', descs: '222' },
-      { id: 'id3', title:'产品名称3', category: '产品类型3', price: '123', create_time: '3', sellPoint: '33', descs: '333' }
+      { id: 'id2', title:'产品名称2', category: '产品类型1', price: '123', create_time: '2', sellPoint: '22', descs: '222' },
+      { id: 'id3', title:'产品名称3', category: '产品类型2', price: '123', create_time: '3', sellPoint: '33', descs: '333' },
+      { id: 'id4', title:'123', category: '产品类型2', price: '123', create_time: '4', sellPoint: '44', descs: '444' },
+      { id: 'id5', title:'123', category: '产品类型3', price: '123', create_time: '5', sellPoint: '55', descs: '555' },
+      { id: 'id6', title:'1234', category: '产品类型3', price: '123', create_time: '6', sellPoint: '66', descs: '666' }
     ];
-    for (const item of customData){
-      console.log('custom name', item.title);
-      console.log('custome type', item.category);
-    }
+    // for (const item of customData){
+    //   console.log('custom name', item.title);
+    //   console.log('custome type', item.category);
+    // }
     customData.forEach(ele => {
         ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
     });
     tableData.value = customData;
     console.log('tabled data', tableData.value)
+    // total.value = 10;
+    // pageSize.value = 10;
+    return customData;
 }
 
-getGoodsList(1)
+getGoodsList()
 
 
 
@@ -121,7 +161,9 @@ getGoodsList(1)
 //点击添加商品
 const addGoods=()=>{
     router.push('/goods/addGoods')
-}
+};
+
+export const customData = ref([]);
 
 </script>
 
