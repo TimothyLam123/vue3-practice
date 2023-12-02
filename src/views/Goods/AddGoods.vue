@@ -62,11 +62,12 @@
 </template>
 
 <script setup>
-import { reactive, ref, defineEmits, defineProps } from 'vue';
+import { reactive, ref } from 'vue';
+// import { reactive, ref, defineEmits, defineProps } from 'vue';
 import GoodsTree from './GoodsTree.vue'
 import GoodsUpload from './GoodsUpload.vue'
 import WangEditor from './WangEditor.vue'
-import api from '@/api/index'
+// import api from '@/api/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -162,9 +163,8 @@ const submitForm = async formEl => {
     //     image: JSON.stringify(image)
     //   })
       console.log('Goods Form', goodsForm)
-      console.log('Goods Form Value', goodsForm.value)
-      localStorage.setItem('goodsFormToSend', JSON.stringify(goodsForm.value));
-    //   router.push('/goods/list')
+      localStorage.setItem('goodsFormToSend', JSON.stringify(goodsForm));
+      router.push('/goods/list')
     } else {
       console.log('error submit!', fields)
     }

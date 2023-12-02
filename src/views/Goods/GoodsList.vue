@@ -23,7 +23,7 @@
 
   <el-button type="warning" :icon="Plus" @click="addGoods">添加商品</el-button>
   <!-- <AddGoods :customData="customData" @customEvent="newGoods"/> -->
-  <el-button type="danger" :icon="Delete">删除商品</el-button>
+  <el-button type="danger" :icon="Delete" @click="deleteSelected">删除商品</el-button>
     </div>
   
     <div class="wrapper">
@@ -59,7 +59,6 @@ import api from '@/api/index'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/Pagination.vue'
-import AddGoods from './AddGoods.vue'
 
 const router = useRouter();
 
@@ -75,6 +74,8 @@ const pageSize = ref(10)
 
 //表格数据
 const tableData = ref([])
+
+const ids = ref([])
 
 //查询
 const onSubmit = async () => {
@@ -109,8 +110,14 @@ const onSubmit = async () => {
 
 
 //选择框
-const changeTable=()=>{
-
+const changeTable=(val)=>{
+  let arr = []
+  val.forEach(ele => {
+    arr.push(ele)
+  })
+  ids.value = arr;
+  console.log('选择框', val)
+  console.log('ids', ids)
 }
 
 //编辑
@@ -120,7 +127,35 @@ const handleEdit=(index,row)=>{
 
 //删除
 const handleDelete=(index,row)=>{
+    console.log('删除-----', row)
+    const rowIndex = tableData.value.indexOf(row);
 
+  // 如果找到了匹配的行
+  if (rowIndex !== -1) {
+    // 使用 splice 方法移除该行
+    tableData.value.splice(rowIndex, 1);
+  }
+}
+
+//批量删除
+const deleteSelected=()=>{
+  
+  console.log('批量删除-----', ids.value)
+  const rowIndexArray = ids.value.map(selectedItem => tableData.value.indexOf(selectedItem));
+
+  // 逆序遍历索引数组，确保删除不影响后续的索引
+  for (let i = rowIndexArray.length - 1; i >= 0; i--) {
+    const rowIndex = rowIndexArray[i];
+    
+    // 如果找到了匹配的行
+    if (rowIndex !== -1) {
+      // 使用 splice 方法移除该行
+      tableData.value.splice(rowIndex, 1);
+    }
+  }
+
+  // 清空选择的内容
+  ids.value = [];
 }
 
 //获取产品列表
@@ -172,10 +207,18 @@ const addGoods=()=>{
 // export const customData = ref([]);
 let goodsFormReceived = ref('')
 onMounted(() => {
-  goodsFormReceived = localStorage.getItem('goodsFormToSend')
-  console.log('data received from addGoods', goodsFormReceived)
-  if (goodsFormReceived == "undefined") return
-  tableData.value.push(goodsFormReceived);
+  goodsFormReceived = JSON.parse(localStorage.getItem('goodsFormToSend'))
+  if (goodsFormReceived == ref('')) return
+  const goodsListToAdd = [{ id: '', title:'', category: '', price: '', create_time: '', sellPoint: '', descs: '' }];
+  goodsListToAdd.id = '1234';
+  goodsListToAdd.title = goodsFormReceived.title;
+  goodsListToAdd.category = goodsFormReceived.category;
+  goodsListToAdd.price = goodsFormReceived.price;
+  goodsListToAdd.create_time = dayjs().format('YYYY-MM-DD HH:mm:ss');
+  goodsListToAdd.sellPoint = goodsFormReceived.sellPoint;
+  goodsListToAdd.descs = goodsFormReceived.descs;
+  tableData.value.push(goodsListToAdd);
+  console.log('table data after push received data', tableData)
 });
 
 </script>
