@@ -19,4 +19,7 @@ app.config.globalProperties.$echarts = echarts;
 // import locale from "element-plus/lib/locale/lang/zh-cn";
 // app.use(ElementPlus, {locale});
 
+import { createPinia } from 'pinia'
+app.use(createPinia())
+
 app.use(router).mount('#app')

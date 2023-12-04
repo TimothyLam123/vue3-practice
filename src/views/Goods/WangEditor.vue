@@ -51,6 +51,21 @@ const onChange=(editor)=>{
     emit('sendEditor', editor.children[0].children[0].text)
 }
 
+//清空方法
+const clearWang=()=>{
+  valueHtml.value = ''
+}
+
+//设置内容
+const setWangHtml=(val)=>{
+  valueHtml.value = val
+}
+
+defineExpose({
+  clearWang,
+  setWangHtml
+})
+
 </script>
 
 <style>

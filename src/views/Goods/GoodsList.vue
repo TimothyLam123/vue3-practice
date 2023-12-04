@@ -59,6 +59,11 @@ import api from '@/api/index'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/Pagination.vue'
+import { useGoodsStore } from '@/store/Goods'
+
+//仓库
+const goods = useGoodsStore()
+// console.log('仓库数据', goods);
 
 const router = useRouter();
 
@@ -122,7 +127,10 @@ const changeTable=(val)=>{
 
 //编辑
 const handleEdit=(index,row)=>{
-
+    console.log('编辑', row)
+    goods.changeTitle('编辑')
+    goods.changeRowData(row)
+    router.push('/goods/addGoods')
 }
 
 //删除
@@ -209,16 +217,22 @@ let goodsFormReceived = ref('')
 onMounted(() => {
   goodsFormReceived = JSON.parse(localStorage.getItem('goodsFormToSend'))
   if (goodsFormReceived == ref('')) return
-  const goodsListToAdd = [{ id: '', title:'', category: '', price: '', create_time: '', sellPoint: '', descs: '' }];
-  goodsListToAdd.id = '1234';
-  goodsListToAdd.title = goodsFormReceived.title;
-  goodsListToAdd.category = goodsFormReceived.category;
-  goodsListToAdd.price = goodsFormReceived.price;
-  goodsListToAdd.create_time = dayjs().format('YYYY-MM-DD HH:mm:ss');
-  goodsListToAdd.sellPoint = goodsFormReceived.sellPoint;
-  goodsListToAdd.descs = goodsFormReceived.descs;
+  const goodsListToAdd = {
+    id: '1234',
+    title: goodsFormReceived.title,
+    category: goodsFormReceived.category,
+    price: goodsFormReceived.price,
+    create_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    sellPoint: goodsFormReceived.sellPoint,
+    descs: goodsFormReceived.descs,
+  };
   tableData.value.push(goodsListToAdd);
   console.log('table data after push received data', tableData)
+  const indexToUpdate = tableData.value.findIndex((item) => item.id === goods.rowData.id);
+  if (indexToUpdate !== -1) {
+    tableData.value.splice(indexToUpdate, 1, goods.rowData);
+  }
+  console.log('goods.rowData from goodsList 12312312312312', goods.rowData)
 });
 
 </script>
