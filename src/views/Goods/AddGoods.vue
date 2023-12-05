@@ -74,7 +74,6 @@ import { useGoodsStore } from '@/store/Goods'
 import { ElMessage } from 'element-plus'
 
 const goods = useGoodsStore();
-console.log('goods123123123123132',goods)
 
 //图片容器
 const fileList = ref([])
@@ -120,10 +119,9 @@ const rules = reactive({
 
 //获取仓库数据
 if (goods.title === '编辑') {
-    console.log('goods.rowData', goods.rowData)
     Object.assign(goodsForm, goods.rowData)
     //获取imgs
-    if (goods.rowData.image) {
+    if (goods.rowData.image.length > 0) {
         let arr = JSON.parse(goods.rowData.image)
         img = []
         arr.forEach(ele => {
@@ -156,7 +154,6 @@ if (goods.title === '编辑') {
 
 //接受wangEditor的数据
 const sendEditor=(val)=>{
-    console.log('接受wangEditor数据', val);
     goodsForm.descs = val;
 }
 
@@ -169,16 +166,10 @@ const submitForm = async formEl => {
       let { id, title, cid, category, sellPoint, price, num, descs, image, create_time } = goodsForm;
       goodsForm.create_time = dayjs().format('YYYY-MM-DD HH:mm:ss')
       if (goods.title === '添加') {
-        console.log('Goods Form', goodsForm)
-        const allGoods = JSON.parse(localStorage.getItem('allGoods'));
-        console.log('all goods', allGoods)
-        goodsForm.id = 'id' + (allGoods.length + 1);
-        const newGoodsForm = JSON.parse(JSON.stringify(goodsForm))
-        allGoods.push(newGoodsForm);
-        localStorage.setItem('allGoods', JSON.stringify(allGoods));
+        goods.addNewData(goodsForm)
         router.push('/goods/list')
       } else {
-        goods.changeRowData(goodsForm)
+        goods.modifyData(goodsForm)
         router.push('/goods/list')
       }
     } else {

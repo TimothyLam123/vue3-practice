@@ -22,7 +22,6 @@
   <br>
 
   <el-button type="warning" :icon="Plus" @click="addGoods">添加商品</el-button>
-  <!-- <AddGoods :customData="customData" @customEvent="newGoods"/> -->
   <el-button type="danger" :icon="Delete" @click="deleteSelected">删除商品</el-button>
     </div>
   
@@ -165,6 +164,8 @@ const deleteSelected=()=>{
 
   // 清空选择的内容
   ids.value = [];
+  
+  localStorage.setItem('allGoods', JSON.stringify(tableData.value))
 }
 
 //获取产品列表
@@ -193,16 +194,13 @@ const getGoodsList = () => {
 
 //点击添加商品
 const addGoods=()=>{
-    router.push('/goods/addGoods')
+  goods.changeTitle('添加')
+  router.push('/goods/addGoods')
 };
 
 let goodsFormReceived = ref('')
 onMounted(() => {
     tableData.value = JSON.parse(localStorage.getItem('allGoods'));
-    const indexToUpdate = tableData.value.findIndex(item => item.id === goods.rowData.id);
-    if (indexToUpdate !== -1) {
-      tableData.value.splice(indexToUpdate, 1, goods.rowData);
-    }
     localStorage.setItem('allGoods', JSON.stringify(tableData.value));
 });
 
