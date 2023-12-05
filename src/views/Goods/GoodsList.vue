@@ -182,8 +182,6 @@ const getGoodsList = () => {
         ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
     });
     localStorage.setItem('allGoods', JSON.stringify(customData));
-    tableData.value = JSON.parse(localStorage.getItem('allGoods'));
-    localStorage.setItem('allGoods', JSON.stringify(customData));
     // total.value = 10;
     // pageSize.value = 10;
     return customData;
