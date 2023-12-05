@@ -47,8 +47,6 @@
                             <el-form-item>
                                 <el-button v-show="title !='详情'" type = "primary"
                                     @click="submitForm(ruleForm)">保存</el-button>
-                                <!-- <el-button v-show="title !='详情'" type = "primary"
-                                    @click="submitForm">保存</el-button> -->
                                 <el-button v-show="title !='详情'"
                                     @click="resetForm(ruleForm)">重置</el-button>
                                 <el-button @click="goGoodsList()" type = "info" plain>取消</el-button> 
@@ -67,6 +65,7 @@ import { nextTick, reactive, ref } from 'vue';
 import GoodsTree from './GoodsTree.vue'
 import GoodsUpload from './GoodsUpload.vue'
 import WangEditor from './WangEditor.vue'
+import dayjs from 'dayjs'
 // import api from '@/api/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -167,20 +166,24 @@ const submitForm = async formEl => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       console.log('获取表单的输入信息: ', goodsForm);
-      let { id, title, cid, category, sellPoint, price, num, descs, image } = goodsForm;
-    //   addGood({
-    //     title, cid, category, sellPoint, price, num, descs,
-    //     image: JSON.stringify(image)
-    //   })
+      let { id, title, cid, category, sellPoint, price, num, descs, image, create_time } = goodsForm;
+      goodsForm.create_time = dayjs().format('YYYY-MM-DD HH:mm:ss')
       if (goods.title === '添加') {
         console.log('Goods Form', goodsForm)
-        localStorage.setItem('goodsFormToSend', JSON.stringify(goodsForm));
+        const allGoods = JSON.parse(localStorage.getItem('allGoods'));
+        console.log('all goods', allGoods)
+        goodsForm.id = 'id' + (allGoods.length + 1);
+        const newGoodsForm = JSON.parse(JSON.stringify(goodsForm))
+        allGoods.push(newGoodsForm);
+        localStorage.setItem('allGoods', JSON.stringify(allGoods));
         router.push('/goods/list')
       } else {
-        console.log('goods.rowData before', goods.rowData)
-        // Object.assign(goods.rowData, goodsForm)
-        goods.changeRowData(goodsForm)
-        console.log('goods.rowData after', goods.rowData)
+        const allGoods = JSON.parse(localStorage.getItem('allGoods'));
+        const indexToUpdate = allGoods.findIndex(item => item.id === goods.rowData.id);
+        if (indexToUpdate !== -1) {
+          allGoods.splice(indexToUpdate, 1, goodsForm);
+        }
+        localStorage.setItem('allGoods', JSON.stringify(allGoods));
         router.push('/goods/list')
       }
     } else {

@@ -143,6 +143,7 @@ const handleDelete=(index,row)=>{
     // 使用 splice 方法移除该行
     tableData.value.splice(rowIndex, 1);
   }
+  localStorage.setItem('allGoods', JSON.stringify(tableData.value))
 }
 
 //批量删除
@@ -168,14 +169,6 @@ const deleteSelected=()=>{
 
 //获取产品列表
 const getGoodsList = () => {
-    // console.log('123',api.getGoodsList({ page }))
-    // let res = api.getGoodsList({ page });
-    // console.log('Data:', res.data);
-    // let arr = res.data.data;
-    // arr.forEach(ele => {
-    //     ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
-    // });
-    // tableData.value = res.date.data
     const customData = [
       { id: 'id1', title:'产品名称1', category: '产品类型1', price: '123', create_time: '1', sellPoint: '11', descs: '111' },
       { id: 'id2', title:'产品名称2', category: '产品类型1', price: '123', create_time: '2', sellPoint: '22', descs: '222' },
@@ -184,21 +177,16 @@ const getGoodsList = () => {
       { id: 'id5', title:'123', category: '产品类型3', price: '123', create_time: '5', sellPoint: '55', descs: '555' },
       { id: 'id6', title:'1234', category: '产品类型3', price: '123', create_time: '6', sellPoint: '66', descs: '666' }
     ];
-    // for (const item of customData){
-    //   console.log('custom name', item.title);
-    //   console.log('custome type', item.category);
-    // }
     customData.forEach(ele => {
         ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
     });
-    tableData.value = customData;
-    console.log('tabled data', tableData.value)
+    localStorage.setItem('allGoods', JSON.stringify(customData));
+    tableData.value = JSON.parse(localStorage.getItem('allGoods'));
+    localStorage.setItem('allGoods', JSON.stringify(customData));
     // total.value = 10;
     // pageSize.value = 10;
     return customData;
 }
-
-getGoodsList()
 
 
 
@@ -208,31 +196,10 @@ const addGoods=()=>{
     router.push('/goods/addGoods')
 };
 
-//接受新的商品从AddGoods
-// const newGoods = (message) => {
-//   console.log('从AddGoods接收的新商品', message)
-// }
-// export const customData = ref([]);
 let goodsFormReceived = ref('')
 onMounted(() => {
-  goodsFormReceived = JSON.parse(localStorage.getItem('goodsFormToSend'))
-  if (goodsFormReceived == ref('')) return
-  const goodsListToAdd = {
-    id: '1234',
-    title: goodsFormReceived.title,
-    category: goodsFormReceived.category,
-    price: goodsFormReceived.price,
-    create_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    sellPoint: goodsFormReceived.sellPoint,
-    descs: goodsFormReceived.descs,
-  };
-  tableData.value.push(goodsListToAdd);
-  console.log('table data after push received data', tableData)
-  const indexToUpdate = tableData.value.findIndex((item) => item.id === goods.rowData.id);
-  if (indexToUpdate !== -1) {
-    tableData.value.splice(indexToUpdate, 1, goods.rowData);
-  }
-  console.log('goods.rowData from goodsList 12312312312312', goods.rowData)
+    tableData.value = JSON.parse(localStorage.getItem('allGoods'));
+    localStorage.setItem('allGoods', JSON.stringify(tableData.value));
 });
 
 </script>
