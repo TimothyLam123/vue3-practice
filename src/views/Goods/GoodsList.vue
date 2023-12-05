@@ -199,6 +199,10 @@ const addGoods=()=>{
 let goodsFormReceived = ref('')
 onMounted(() => {
     tableData.value = JSON.parse(localStorage.getItem('allGoods'));
+    const indexToUpdate = tableData.value.findIndex(item => item.id === goods.rowData.id);
+    if (indexToUpdate !== -1) {
+      tableData.value.splice(indexToUpdate, 1, goods.rowData);
+    }
     localStorage.setItem('allGoods', JSON.stringify(tableData.value));
 });
 

@@ -178,12 +178,7 @@ const submitForm = async formEl => {
         localStorage.setItem('allGoods', JSON.stringify(allGoods));
         router.push('/goods/list')
       } else {
-        const allGoods = JSON.parse(localStorage.getItem('allGoods'));
-        const indexToUpdate = allGoods.findIndex(item => item.id === goods.rowData.id);
-        if (indexToUpdate !== -1) {
-          allGoods.splice(indexToUpdate, 1, goodsForm);
-        }
-        localStorage.setItem('allGoods', JSON.stringify(allGoods));
+        goods.changeRowData(goodsForm)
         router.push('/goods/list')
       }
     } else {
