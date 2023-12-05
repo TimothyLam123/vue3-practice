@@ -198,10 +198,8 @@ const addGoods=()=>{
   router.push('/goods/addGoods')
 };
 
-let goodsFormReceived = ref('')
 onMounted(() => {
     tableData.value = JSON.parse(localStorage.getItem('allGoods'));
-    localStorage.setItem('allGoods', JSON.stringify(tableData.value));
 });
 
 </script>
