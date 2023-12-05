@@ -52,9 +52,7 @@
 
 <script setup>
 import { reactive,ref,onMounted } from 'vue'
-import { DataAnalysis, Delete,EditPen,Plus } from '@element-plus/icons-vue'
-import api from '@/api/index'
-// console.log(api)
+import { Delete,EditPen,Plus } from '@element-plus/icons-vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/Pagination.vue'
@@ -82,10 +80,10 @@ const tableData = ref([])
 const ids = ref([])
 
 //查询
-const onSubmit = async () => {
+const onSubmit = () => {
   console.log('formInline submit!', formInline.name)
 
-  const data = await getGoodsList();
+  const data = JSON.parse(localStorage.getItem('allGoods'));
   let filteredData = null;
 
   console.log('filtered data before', filteredData)
@@ -98,7 +96,6 @@ const onSubmit = async () => {
       if (item.title.includes(formInline.name)) {
         filteredData = item;
         tableData.value.push(filteredData);
-        // break;
       }
     }
   }

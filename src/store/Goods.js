@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useGoodsStore = defineStore('goods', {
     state:()=>({
-        rowData: {},
+        rowData: {image:[]},
         title:'添加'
     }),
     getters:{
@@ -18,7 +18,7 @@ export const useGoodsStore = defineStore('goods', {
         },
         addNewData(payload){
             const allGoods = JSON.parse(localStorage.getItem('allGoods'));
-            payload.id = 'id' + (allGoods.length + 2);
+            payload.id = 'id' + (allGoods.length + 1);
             const newGoodsForm = JSON.parse(JSON.stringify(payload))
             allGoods.push(newGoodsForm);
             localStorage.setItem('allGoods', JSON.stringify(allGoods));

@@ -47,7 +47,6 @@ const handleCreated = (editor) => {
 }
 
 const onChange=(editor)=>{
-    console.log('content', editor.children[0].children[0].text);
     emit('sendEditor', editor.children[0].children[0].text)
 }
 

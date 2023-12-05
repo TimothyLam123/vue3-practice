@@ -121,7 +121,7 @@ const rules = reactive({
 if (goods.title === '编辑') {
     Object.assign(goodsForm, goods.rowData)
     //获取imgs
-    if (goods.rowData.image.length > 0) {
+    if (goods.rowData.image) {
         let arr = JSON.parse(goods.rowData.image)
         img = []
         arr.forEach(ele => {
