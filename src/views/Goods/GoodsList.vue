@@ -81,32 +81,17 @@ const ids = ref([])
 
 //查询
 const onSubmit = () => {
-  console.log('formInline submit!', formInline.name)
-
-  const data = JSON.parse(localStorage.getItem('allGoods'));
-  let filteredData = null;
-
-  console.log('filtered data before', filteredData)
-  tableData.value = [];
-  
-  console.log('table data 1', tableData.value)
-  
-  for (const item of data) {
-    if (formInline.name != '') {
-      if (item.title.includes(formInline.name)) {
-        filteredData = item;
-        tableData.value.push(filteredData);
-      }
-    }
-  }
-  console.log('table data 2', tableData.value)
-
-  console.log('filtered data after', filteredData)
-  if (tableData.value.length === 0) {
+  if (formInline.name === '') {
+    tableData.value = []
     total.value = 0;
     pageSize.value = 0
-    console.log('table data after', tableData.value)
+  } else {
+    goods.searchGoods(formInline)
+    .then((tempList) =>{
+      tableData.value = tempList
+    })
   }
+  
 }
 
 
@@ -131,15 +116,8 @@ const handleEdit=(index,row)=>{
 
 //删除
 const handleDelete=(index,row)=>{
-    console.log('删除-----', row)
-    const rowIndex = tableData.value.indexOf(row);
-
-  // 如果找到了匹配的行
-  if (rowIndex !== -1) {
-    // 使用 splice 方法移除该行
-    tableData.value.splice(rowIndex, 1);
-  }
-  localStorage.setItem('allGoods', JSON.stringify(tableData.value))
+  goods.deleteGoods(row.id)
+  tableData.value = goods.listGoods
 }
 
 //批量删除
@@ -165,24 +143,24 @@ const deleteSelected=()=>{
   localStorage.setItem('allGoods', JSON.stringify(tableData.value))
 }
 
-//获取产品列表
-const getGoodsList = () => {
-    const customData = [
-      { id: 'id1', title:'产品名称1', category: '产品类型1', price: '123', create_time: '1', sellPoint: '11', descs: '111' },
-      { id: 'id2', title:'产品名称2', category: '产品类型1', price: '123', create_time: '2', sellPoint: '22', descs: '222' },
-      { id: 'id3', title:'产品名称3', category: '产品类型2', price: '123', create_time: '3', sellPoint: '33', descs: '333' },
-      { id: 'id4', title:'123', category: '产品类型2', price: '123', create_time: '4', sellPoint: '44', descs: '444' },
-      { id: 'id5', title:'123', category: '产品类型3', price: '123', create_time: '5', sellPoint: '55', descs: '555' },
-      { id: 'id6', title:'1234', category: '产品类型3', price: '123', create_time: '6', sellPoint: '66', descs: '666' }
-    ];
-    customData.forEach(ele => {
-        ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
-    });
-    localStorage.setItem('allGoods', JSON.stringify(customData));
-    // total.value = 10;
-    // pageSize.value = 10;
-    return customData;
-}
+// //获取产品列表
+// const getGoodsList = () => {
+//     const customData = [
+//       { id: 'id1', title:'产品名称1', category: '产品类型1', price: '123', create_time: '1', sellPoint: '11', descs: '111' },
+//       { id: 'id2', title:'产品名称2', category: '产品类型1', price: '123', create_time: '2', sellPoint: '22', descs: '222' },
+//       { id: 'id3', title:'产品名称3', category: '产品类型2', price: '123', create_time: '3', sellPoint: '33', descs: '333' },
+//       { id: 'id4', title:'123', category: '产品类型2', price: '123', create_time: '4', sellPoint: '44', descs: '444' },
+//       { id: 'id5', title:'123', category: '产品类型3', price: '123', create_time: '5', sellPoint: '55', descs: '555' },
+//       { id: 'id6', title:'1234', category: '产品类型3', price: '123', create_time: '6', sellPoint: '66', descs: '666' }
+//     ];
+//     customData.forEach(ele => {
+//         ele.create_time = dayjs(ele.create_time).format('YYYY-MM-DD HH:mm:ss')
+//     });
+//     localStorage.setItem('allGoods', JSON.stringify(customData));
+//     // total.value = 10;
+//     // pageSize.value = 10;
+//     return customData;
+// }
 
 
 

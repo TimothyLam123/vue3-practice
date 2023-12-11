@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
 
+const getListGoods = () => {
+    return JSON.parse(localStorage.getItem('allGoods') || '[]')
+}
+
 export const useGoodsStore = defineStore('goods', {
     state:()=>({
         rowData: {image:[]},
-        title:'添加'
+        title:'添加',
+        listGoods: getListGoods()
     }),
     getters:{
 
@@ -17,19 +22,32 @@ export const useGoodsStore = defineStore('goods', {
             this.rowData = payload
         },
         addNewData(payload){
-            const allGoods = JSON.parse(localStorage.getItem('allGoods'));
-            payload.id = 'id' + (allGoods.length + 1);
-            const newGoodsForm = JSON.parse(JSON.stringify(payload))
-            allGoods.push(newGoodsForm);
-            localStorage.setItem('allGoods', JSON.stringify(allGoods));
+            payload.id = 'id' + (this.listGoods.length + 1);
+            this.listGoods.push(payload);
+            localStorage.setItem('allGoods', JSON.stringify(this.listGoods));
         },
         modifyData(payload){
-            const allGoods = JSON.parse(localStorage.getItem('allGoods'));
-            const indexToUpdate = allGoods.findIndex(item => item.id === payload.id);
+            const indexToUpdate = this.listGoods.findIndex(item => item.id === payload.id);
             if (indexToUpdate !== -1) {
-              allGoods.splice(indexToUpdate, 1, payload);
+              this.listGoods.splice(indexToUpdate, 1, payload);
             }
-            localStorage.setItem('allGoods', JSON.stringify(allGoods));
+            localStorage.setItem('allGoods', JSON.stringify(this.listGoods));
+        },
+        searchGoods(payload){
+            return new Promise((resolve, reject) => {
+                const tempList = this.listGoods.filter(item => {
+                    return item.title.indexOf(payload.name) !== -1
+                })
+                resolve(tempList)
+            })
+        },
+        deleteGoods(id){
+            return new Promise((resolve, reject) => {
+                const index = this.listGoods.findIndex(item => item.id === id)
+                this.listGoods.splice(index,1)
+                localStorage.setItem('allGoods', JSON.stringify(this.listGoods));
+                resolve(this.listGoods)
+            })
         },
         //清空
         clearGoods(){
