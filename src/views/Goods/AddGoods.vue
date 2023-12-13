@@ -120,10 +120,11 @@ const rules = reactive({
 //获取仓库数据
 if (goods.title === '编辑') {
     Object.assign(goodsForm, goods.rowData)
+    console.log('goods.rowData.image', goods.rowData.image)
     //获取imgs
-    if (goods.rowData.image) {
-        let arr = JSON.parse(goods.rowData.image)
-        img = []
+    if (goods?.rowData?.image) {
+        let arr = goods.rowData.image
+        let img = []
         arr.forEach(ele => {
             let obj = {}
             obj.url = ele
