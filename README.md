@@ -10,6 +10,12 @@ yarn install
 yarn serve
 ```
 
+### To get the random data for the Homepage
+```
+cd server
+nodemon
+```
+
 ### Compiles and minifies for production
 ```
 yarn build
