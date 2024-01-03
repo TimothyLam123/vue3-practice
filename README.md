@@ -10,7 +10,7 @@ yarn install
 yarn serve
 ```
 
-### To get the random data for the Homepage
+### To get the data for the Homepage
 ```
 cd server
 nodemon
