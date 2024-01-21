@@ -1,4 +1,4 @@
-# cue3-practice
+# vue3-practice
 
 ## Project setup
 ```
